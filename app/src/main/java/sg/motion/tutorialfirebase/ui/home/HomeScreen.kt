@@ -66,23 +66,23 @@ fun HomeScreen(navController: NavController, authRepository: AuthRepository) {
     // Collect notes
     LaunchedEffect(Unit) {
         // Collect Notes One time
-        notesRepository.getNotes().collect { result ->
-            result.onSuccess {
-                notes = it
-            }.onFailure {
-                errorMessage = it.localizedMessage ?: "Failed to load notes"
-            }
-        }
-
-        // Collect Notes Real time
-//        notesRepository.getNotesRealTime().collect { result ->
-//            result.onSuccess { updatedNotes ->
-//                // Notes will automatically update in real-time
-//                notes = updatedNotes
+//        notesRepository.getNotes().collect { result ->
+//            result.onSuccess {
+//                notes = it
 //            }.onFailure {
 //                errorMessage = it.localizedMessage ?: "Failed to load notes"
 //            }
 //        }
+
+        // Collect Notes Real time
+        notesRepository.getNotesRealTime().collect { result ->
+            result.onSuccess { updatedNotes ->
+                // Notes will automatically update in real-time
+                notes = updatedNotes
+            }.onFailure {
+                errorMessage = it.localizedMessage ?: "Failed to load notes"
+            }
+        }
     }
 
     Scaffold(
@@ -141,13 +141,13 @@ fun HomeScreen(navController: NavController, authRepository: AuthRepository) {
                     value = newNoteContent,
                     onValueChange = { newNoteContent = it },
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(9f)
                         .padding(16.dp),
                     placeholder = { Text("Write a new note...") },
                     maxLines = 3
                 )
                 IconButton(
-                    modifier = Modifier.size(24.dp).padding(8.dp),
+                    modifier = Modifier.weight(1f).size(24.dp),
                     onClick = {
                         // Create new note
                         if (newNoteContent.isNotBlank()) {
